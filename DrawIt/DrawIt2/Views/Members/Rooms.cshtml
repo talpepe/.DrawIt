@@ -1,0 +1,39 @@
+﻿@model IEnumerable<DrawIt.Models.RoomModels>
+
+@{
+    ViewBag.Title = "Rooms";
+}
+
+<h2>Rooms</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxUsers)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaxUsers)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.RoomName }) |
+            @Html.ActionLink("Details", "Details", new { id=item.RoomName }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.RoomName })
+        </td>
+    </tr>
+}
+
+</table>

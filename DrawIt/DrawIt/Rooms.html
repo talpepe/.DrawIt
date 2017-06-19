@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Rooms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link href="styles/MyStSh.css" rel="stylesheet" type="text/css" />
+    <link href="styles/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).on('mobileinit', function () {
+            $.mobile.defaultPageTransition = "slide";
+        });
+    </script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript">
+
+        //_________________Room Page ________________
+        $(document).on("pageinit", "#RoomsPage", function (event) {
+            wireEventsRoomsPage();
+        });
+
+        function wireEventsRoomsPage() {
+
+        }
+
+    </script>
+</head>
+<body>
+    <!--Choose Room-->
+    <div data-role="page" id="chooseRoom">
+        <div data-role="header">
+
+            <h5>Choose Room Type:</h5>
+        </div>
+
+        <div data-role="content">
+            <center>
+                <a href="#newRoom" data-role="button" data-inline="true">New Room</a>
+                <a href="#existing" data-role="button" data-inline="true">Existing Room</a>
+            </center>
+        </div>
+    </div>
+
+    <!--New Room-->
+    <div data-role="page" id="newRoom">
+        <div data-role="header">
+
+            <h5>New Room:</h5>
+        </div>
+
+        <div data-role="content">
+            <center>
+                <h2>Your room number is:</h2>
+                <script>
+                            // function newRoom() {
+                            //  newRoom();
+
+                            // DOT.server.newRoom();
+                            //}
+                </script>
+
+            </center>
+        </div>
+
+
+    </div>
+
+    <!--Existing Room-->
+    <div data-role="page" id="existing">
+        <div data-role="header">
+
+            <h5>Existing Room</h5>
+        </div>
+
+        <div data-role="content">
+            <center>
+                <h5>Please enter room number:</h5>
+
+                <label for="roomNum"></label>
+                <input type="text" id="roomNum" />
+
+            </center>
+        </div>
+    </div>
+</body>
+</html>

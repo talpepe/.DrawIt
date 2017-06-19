@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link href="styles/MyStSh.css" rel="stylesheet" type="text/css" />
+    <link href="styles/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).on('mobileinit', function () {
+            $.mobile.defaultPageTransition = "slide";
+        });
+    </script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript">
+
+        //_________________Welcome Page ________________
+        $(document).on("pageinit", "#WelcomePage", function (event) {
+            wireEventsWelcomePage();
+        });
+
+        function wireEventsWelcomePage() {
+
+        }
+
+    </script> 
+</head>
+<body>
+    <!--Welcome-->
+    <div data-role="page" id="welcome">
+        <div data-role="header">
+
+            <h5>Welcome to DrawIt!</h5>
+        </div>
+
+        <div data-role="content">
+            <center>
+                <a href="Rooms.html" data-role="button" data-inline="true">Rooms</a>
+                <br>
+                <a href="login.html" data-role="button" data-inline="true">Login</a>
+            </center>
+
+        </div>
+    </div>
+   
+
+
+</body>
+</html>

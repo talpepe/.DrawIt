@@ -1,0 +1,426 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DrawIt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script src="http://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
+    <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.2.js")"></script>
+
+
+
+    <script src="/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#black").click(function () {
+                color = 'black';
+            });
+
+            $("#red").click(function () {
+                color = 'red';
+            });
+
+
+            $("#orange").click(function () {
+                color = 'orange';
+            });
+
+            $("#blue").click(function () {
+                color = 'blue';
+            });
+            $("#green").click(function () {
+                color = 'green';
+            });
+
+            $("#purple").click(function () {
+                color = 'purple';
+            });
+
+            $("#pink").click(function () {
+                color = 'pink';
+            });
+
+            $("#white").click(function () {
+                color = 'white';
+            });
+
+            $("#slider-1").on('slidestop', function (event) {
+
+                SIZE = $('#slider-1').val();
+
+
+            });
+
+
+
+        });
+
+
+
+
+
+
+
+
+        //Create the SignalR Connection
+        var DOT = $.connection.drawItSignal;
+        //Start the SignalR hub
+        $.connection.hub.start().done();
+
+        //
+        //Function called from DrawIt Server
+
+
+        SIZE = 5;
+
+        DOT.client.updateDot = function (x, y, lastx, lasty, size, color2) {
+
+            DrawIt(x, y, lastx, lasty, size, color2);
+
+        };
+
+        DOT.client.apply = function () {
+            alert('yes');
+        }
+
+        //Function called from DrawIt Server
+        DOT.client.clearCanvas = function (x, y) {
+            clearCanvas();
+        };
+        //////////////////////////////////////////////////////
+        // Variables for referencing the canvas and 2dcanvas context
+        var canvas, ctx;
+        var color = 'black';
+        // Variables to keep track of the mouse position and left-button status
+        var lastPosX, lastPosY, mouseX, mouseY, mouseDown = 0, drawn;
+        // Draws a dot at a specific position on the supplied canvas name
+        // Parameters are: A canvas context, the x position, the y position, the size of the dot
+
+
+
+
+
+
+        /*
+
+             function DrawIt(x, y, size) {
+                    // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
+                    r = 0; g = 0; b = 0; a = 255;
+                    // Select a fill style
+                    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
+                     // Draw a filled circle
+                     ctx.beginPath();
+                     ctx.arc(x, y, size, 0, Math.PI * 2, true);
+                     ctx.closePath();
+                     ctx.fill();
+             }
+
+
+
+             */
+
+        function DrawIt(x, y, lastx, lasty, size, col) {
+            /* //  Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
+
+              // Select a fill style
+              ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
+              // Draw a filled circle
+              ctx.beginPath();
+              ctx.arc(x, y, size, 0, Math.PI * 2, true);
+              ctx.closePath();
+              ctx.fill();*/
+
+
+            ctx.strokeStyle = col;
+            ctx.fillStyle = col;
+            //r = 255; g = 0; b = 0; a = 255;
+
+            ctx.lineWidth = size;
+            ctx.lineCap = 'round';
+
+            // ctx.fillRect(x - Math.round(SIZE / 2), y - Math.round(SIZE / 2), size, size);
+            ctx.beginPath();
+            ctx.moveTo(lastx, lasty);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+        }
+
+
+
+
+
+
+
+
+        // Clear the canvas context using the canvas width and height
+        function cleanCanvas() {
+            clearCanvas();
+            DOT.server.clearCanvas();
+        }
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+
+
+
+
+
+        // Keep track of the mouse button being pressed and draw a dot at current location
+        function sketchpad_mouseDown(e) {
+            mouseDown = 1;
+            getMousePos(e);
+            lastPosX = mouseX;
+            lastPosY = mouseY;
+
+            DrawIt(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+            DOT.server.updateCanvas(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+
+
+        }
+
+
+        // Keep track of the mouse button being released
+        function sketchpad_mouseUp() {
+            mouseDown = 0;
+
+
+        }
+        // Keep track of the mouse position and draw a dot if mouse button is currently pressed
+        function sketchpad_mouseMove(e) {
+            // Update the mouse co-ordinates when moved
+
+
+
+
+
+            // Draw a dot if the mouse button is currently being pressed
+            if (mouseDown == 1) {
+
+
+                lastPosX = mouseX;
+                lastPosY = mouseY;
+                getMousePos(e);
+
+
+                DrawIt(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+                DOT.server.updateCanvas(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+            }
+
+            $('#hehe').html('mouseX: ' + mouseX + ' mouseY: ' + mouseY);
+        }
+
+        function touchUp() {
+            mouseDown = 0;
+
+        }
+
+        function touchMove(e) {
+            // Update the mouse co-ordinates when moved
+            lastPosX = mouseX;
+            lastPosY = mouseY;
+            touchXY(e);
+
+            // Draw a dot if the mouse button is currently being pressed
+            if (mouseDown == 1) {
+                DrawIt(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+                DOT.server.updateCanvas(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+
+            }
+        }
+
+
+        function touchDown() {
+            mouseDown = 1;
+            touchXY();
+            lastPosX = mouseX;
+            lastPosY = mouseY;
+            DrawIt(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+            DOT.server.updateCanvas(mouseX, mouseY, lastPosX, lastPosY, SIZE, color);
+        }
+
+
+        function touchXY(e) {
+            if (!e)
+                var e = event;
+            e.preventDefault();
+            mouseX = Math.floor(e.targetTouches[0].pageX - canvas.offsetLeft);
+            mouseY = Math.floor(e.targetTouches[0].pageY - canvas.offsetTop);
+
+            $('#hehe').html('mouseX: ' + mouseX + ' mouseY: ' + mouseY);
+
+        }
+
+
+
+
+
+
+
+        /*function showPos() {
+            // large, centered, bright green text
+            ctx.font = "24pt Helvetica";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(64,255,64)";
+            var str = canX + ", " + canY;
+            if (mouseIsDown)
+                str += " down";
+            if (!mouseIsDown)
+                str += " up";
+            ctx.clearRect(0, 0, can.width, can.height);
+            // draw text at center, max length to fit on canvas
+            ctx.fillText(str, can.width / 2, can.height / 2, can.width - 10);
+            // plot cursor
+            ctx.fillStyle = "white";
+            ctx.fillRect(canX - 5, canY - 5, 10, 10);
+        }*/
+
+
+
+
+
+
+
+
+
+        /* Get the current mouse position relative to the top-left of the canvas
+        function getMousePos(e) {
+        if (!e)
+        var e = event;
+        if (e.offsetX) {
+        mouseX = e.offsetX;
+        mouseY = e.offsetY;
+        }
+        else if (e.layerX) {
+        mouseX = e.layerX;
+        mouseY = e.layerY;
+        }
+        }*/
+
+        function getMousePos(mouseEvent) {
+            var rect = canvas.getBoundingClientRect();
+
+            mouseX = mouseEvent.clientX - rect.left;
+            mouseY = mouseEvent.clientY - rect.top;
+
+        }
+
+
+        /*function getTouchPos(touchEvent) {
+            var rect = canvas.getBoundingClientRect();
+
+            mouseX = touchEvent.touches[0].clientX - rect.left;
+            mouseY = touchEvent.touches[0].clientY - rect.top;
+
+        }*/
+        // Set-up the canvas and add our event handlers after the page has loaded
+        function init() {
+            // Get the specific canvas element from the HTML document
+            canvas = document.getElementById('sketchpad');
+            // If the browser supports the canvas tag, get the 2d drawing context for this canvas
+            if (canvas.getContext)
+                ctx = canvas.getContext('2d');
+            // Check that we have a valid context to draw on/with before adding event handlers
+            if (ctx) {
+                // React to mouse events on the canvas, and mouseup on the entire document
+                canvas.addEventListener('mousedown', sketchpad_mouseDown, false);
+                canvas.addEventListener('mousemove', sketchpad_mouseMove, false);
+                window.addEventListener('mouseup', sketchpad_mouseUp, false);
+
+                canvas.addEventListener("touchstart", touchDown, false);
+                canvas.addEventListener("touchmove", touchMove, false);
+                canvas.addEventListener("touchend", touchUp, false);
+
+                // document.body.addEventListener("mouseup", sketchpad_mouseUp, false);
+                //document.body.addEventListener("touchcancel", touchUp, false);
+
+            }
+            else {
+                document.write("Browser not supported!!");
+            }
+        }
+    </script>
+    <style>
+        /* Some CSS styling */
+        .rightside {
+            float: left;
+            margin-left: 10px;
+        }
+
+        #sketchpad {
+            float: left;
+            height: 700px;
+            width: 700px;
+            border: 2px solid #888;
+            border-radius: 4px;
+            position: relative; /* Necessary for correct mouse co-ords in Firefox */
+        }
+
+        #clear_button, #save_button {
+            float: left;
+            font-size: 15px;
+            padding: 10px;
+            -webkit-appearance: none;
+            background: #eee;
+            border: 1px solid #888;
+            margin-bottom: 5px;
+        }
+
+        .borderClass {
+            border-color: black;
+            border-width: 2px;
+            border-style: solid;
+            /** OR USE INLINE
+                  border: 1px solid #C1E0FF;
+                  **/
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div data-role="page" id="drawPage" data-theme="a">
+        <div data-role="header">
+        </div>
+        <div data-role="content">
+            <div>
+                <div id="sketchpadapp" style="width:80vh">
+                    <div class="rightside" style="display: inline-block">
+                        <input type="submit" value="Clear Canvas" id="clear_button" onclick="cleanCanvas();" />
+                        <br />
+                        <canvas id="sketchpad" height="700" width="700"></canvas>
+                    </div>
+                </div>
+
+
+                <div data-role="controlgroup">
+                    <a href="#" id="black" style="background: black; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="red" style="background: red; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="blue" style="background: blue; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="green" style="background: green; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="purple" style="background: purple; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="pink" style="background: pink; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="orange" style="background: orange; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <a href="#" id="white" style="background: white; color: white;" class="ui-btn ui-btn-inline borderClass"></a><br />
+                    <div style="max-width:500px">
+                        <label for="slider-1">Size:</label>
+                        <input type="range" name="slider-1" id="slider-1" value="1" min="1" max="25" />
+                    </div>
+                </div>
+                <br />
+
+
+            </div>
+        </div>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-theme="d">
+    </div>
+
+</body>
+</html>

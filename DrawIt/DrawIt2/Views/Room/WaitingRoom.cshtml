@@ -1,0 +1,153 @@
+﻿@model DrawIt.Models.RoomModels
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DrawIt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+   @* <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">*@
+
+    <script src="@Url.Content("~/Scripts/jquery-3.1.1.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/jquery.mobile-1.5.0-alpha.1.min.js")"></script>
+
+
+
+    <script src="@Url.Content("~/Scripts/jquery.signalR-2.2.2.js")"></script>
+
+
+
+    @*<script src="~/signalr/hubs"></script>
+    <script src="@Url.Content("/signalr/hubs"></script>
+    <script type="text/javascript">*@
+
+    <script type="text/javascript" src="@Url.Content("~/signalr/hubs")">
+
+
+
+        $(document).on("pageinit", "#WaitingPage", function (event) {
+
+
+
+        });
+
+
+
+
+        //Create the SignalR Connection
+        var DOT = $.connection.drawItSignal;
+        //Start the SignalR hub
+        $.connection.hub.start().done();
+
+        //
+        //Function called from DrawIt Server
+
+
+       
+
+
+
+
+        DOT.client.GetOut = function (roomname) {
+            GetOut(roomname);
+        };
+
+
+        function GetOut() {
+            location.pathname = '/Room/Index'
+            // location.hash = "DrawPage";
+        }
+
+
+
+
+
+
+        DOT.client.StartDraw = function () {
+            StartDraw();
+        };
+
+        function StartDraw() {
+            location.pathname = '/Members/Draw'
+           // location.hash = "DrawPage";
+            DOT.server.Start();
+        }
+
+
+
+
+    </script>
+    <style>
+
+    </style>
+</head>
+<body onload="init()">
+
+    <div data-role="page" id="WaitingPage" data-theme="a">
+        <div data-role="header">
+
+            <h5>Waiting Room for room @Html.DisplayName(Model.RoomName)</h5>
+        </div>
+
+        <div data-role="content">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RoomUsers)
+                    </th>
+
+                    <th></th>
+                </tr>
+
+        @foreach (var item in Model.RoomUsers) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+
+                </tr>
+
+
+        }
+
+            </table>
+                <div style="display: inline-block">
+                    <input type="submit" value="Start Game" id="clear_button" onclick="StartDraw();" />
+                </div>
+
+
+
+               
+</div>
+
+
+        <div data-role="footer" data-position="fixed" data-theme="d">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#DrawPage">Draw</a></li>
+                    <li><a href="#WaitingPage" class="ui-state-persist">Wait</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div data-role="footer" data-position="fixed" data-theme="d">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#DrawPage" class="ui-state-persist">Draw</a></li>
+                <li><a href="#WaitingPage">Wait</a></li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

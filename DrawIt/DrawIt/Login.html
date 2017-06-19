@@ -1,0 +1,117 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>pages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link href="styles/MyStSh.css" rel="stylesheet" type="text/css" />
+    <link href="styles/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    
+    <script src="scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).on('mobileinit', function () {
+            $.mobile.defaultPageTransition = "slide";
+        });
+    </script>
+    <script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript">
+      
+        //_________________ Login Page ________________
+        $(document).on("pageinit", "#FirstPage", function (event) {
+            wireEventsFirstPage();
+        });
+
+        function wireEventsFirstPage() {
+
+        }
+
+    </script>
+    <style>
+        body {
+            background-image: url("back.jpg");
+         
+        }
+    </style>
+</head>
+<body>
+
+    <!--Login-->
+    <div data-role="page" id="login">
+        <div data-role="header">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#login" class="ui-state-persist">Login</a></li>
+                    <li><a href="#Register" data-transition="flip">Register</a></li>
+                   
+                </ul>
+            </div>
+
+        </div>
+
+        <div data-role="content">
+            <center>
+            <img src="draw.png" height="300" width="350" />
+                <h2>User Name:</h2>
+                <label for="name"></label>
+                <input type="text" name="name" id="name" />
+
+                <h2>Password:</h2>
+                <label for="password"></label>
+                <input type="text" name="password" id="password" />
+                <a href="#WelcomeUser" data-role="button" data-inline="true" style="color:forestgreen">Submmit</a>
+                 
+            </center><br /><br />
+        
+        </div>
+    </div>
+
+    <!--New user-->
+    <div data-role="page" id="Register">
+        <div data-role="header">
+
+            <h5>Register:</h5>
+        </div>
+
+        <div data-role="content">
+            <center>
+                <h2>Choose User Name:</h2>
+                <label for="newName"></label>
+                <input type="text" id="newName" />
+
+                <h2>Choose Password:</h2>
+                <label for="newPassword"></label>
+                <input type="text" id="newPassword" />
+
+                <a href="#WelcomeUser" data-role="button" data-inline="true">Submmit</a>
+            </center>
+        </div>
+    </div>
+
+    <!---UserWelcome-->
+    <div data-role="page" id="WelcomeUser">
+        <div data-role="header">
+            <h5>
+                Welcome name
+                <script>
+
+                </script>
+            </h5>
+        </div>
+        <div data-role="content">
+            <center>
+                <div data-role="controlgroup" data-type="horizontal">
+                    <a href="Rooms.html" data-role="button">Rooms</a>
+                    <a href="#profile" data-role="button">Profile</a>
+                    <a href="#logoff" data-role="button">Logoff</a>
+                </div>
+
+            </center>
+
+        </div>
+    </div>
+
+  
+
+
+</body>
+</html>
